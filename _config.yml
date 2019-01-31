@@ -27,7 +27,6 @@ category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
-xiguanshu_dir: xiguashu
 
 # Writing
 new_post_name: :title.md # File name of new posts
@@ -91,3 +90,19 @@ deploy:
   type: git
   repo: git@github.com:90vFan/90vfan.github.io.git 
   branch: master
+
+# Lean Cloud
+leancloud_counter_security:
+  enable_sync: true
+  app_id: TJPMiF9bd2wtb1EtpVcU9yox-gzGzoHsz
+  app_key: 5QCssLezV1OFNAjSnNucUK6O
+  username: fun20081314@sina.com
+  password: 12345678.LC
+
+# menu
+menu:
+  home: /     
+  categories: /categories 
+  archives: /archives  
+  tags: /tags  
+  about: /about             

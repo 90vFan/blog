@@ -1,6 +1,9 @@
 ---
 title: Decision Tree
 date: 2019-01-31 20:33:05
+mathjax: true
+categories:
+  - xiguashu
 tag: 
   - xiguashu
 ---
@@ -26,8 +29,6 @@ if-then规则集合，每一条路径构建一条规则
 将特征空间划分为互不相交的单元（cell）或区域（region）
 
 $P(Y=+1|X=c)>0.5$, 单元cell　属于正类
-
-
 
 ![1548940003249](feature-space.png)
 
