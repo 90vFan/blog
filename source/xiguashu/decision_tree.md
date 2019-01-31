@@ -1,3 +1,10 @@
+---
+title: Decision Tree
+date: 2019-01-31 20:33:05
+tag: 
+  - xiguashu
+---
+
 ## Part 4. 决策树
 
 --------
@@ -6,7 +13,7 @@
 
 Decision Tree　树形结构，根据损失函数最小化原则建立决策树模型
 
-![1548939696690](/home/ubuntu/projects/blog/source/xiguashu/tree_basic)
+![1548939696690](tree_basic)
 
 if-then规则集合，每一条路径构建一条规则
 
@@ -22,11 +29,11 @@ $P(Y=+1|X=c)>0.5$, 单元cell　属于正类
 
 
 
-![1548940003249](/home/ubuntu/projects/blog/source/xiguashu/feature-space.png)
+![1548940003249](feature-space.png)
 
-![1548940132559](/home/ubuntu/projects/blog/source/xiguashu/1548940132559.png)
+![1548940132559](1548940132559.png)
 
-![1548940093157](/home/ubuntu/projects/blog/source/xiguashu/1548940093157.png)
+![1548940093157](1548940093157.png)
 
 
 
