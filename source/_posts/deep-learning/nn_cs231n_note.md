@@ -4,7 +4,7 @@ date: 2019-06-17
 mathjax: true
 categories:
   - dl
-tag: 
+tag:
   - dl
   - hexo-asset-image
 ---
@@ -13,7 +13,7 @@ tag:
 
 ## 1. 神经元模型与数学模型（Neuron Network Unit）
 
-![img](images/d0cbce2f2654b8e70fe201fec2982c7d_hd.png)
+![img](nn_cs231n_note/d0cbce2f2654b8e70fe201fec2982c7d_hd.png)
 
 神经元（Neuron）通过树突（Dendrites）接收输入信号，沿着轴突（axon）产生输出信号。轴突在末端分叉，通过突触和其他神经元的树突相连。
 
@@ -23,7 +23,7 @@ tag:
 
    输入层  -> 隐藏层 -> 输出层
 
-   ![img](images/ccb56c1fb267bc632d6d88459eb14ace_hd.png)
+   ![img](nn_cs231n_note/ccb56c1fb267bc632d6d88459eb14ace_hd.png)
 
 ## 2. 常用激活函数
 
@@ -45,9 +45,9 @@ tag:
 3. 激活值永远全为正（负），下一神经元的输入总是正数（负数），则反向传播过程中梯度更新呈z字型
 4. exp指数函数计算复杂
 
-![1560776135809](images/1560776135809.png)
+![1560776135809](nn_cs231n_note/1560776135809.png)
 
-#### tanh  
+#### tanh
 
 $tanh(x)=2\sigma(2x)-1$
 
@@ -73,22 +73,25 @@ $tanh(x)=2\sigma(2x)-1$
 
 1. 可能导致部分神经元“死掉”，永远不会被激活。输出值始终为负，激活值为0，梯度为0，反向传播不更新此神经元的梯度。降低学习率来降低神经元“死掉”的概率。
 
+   
 
-![img](images/677187e96671a4cac9c95352743b3806_hd.png)
+![677187e96671a4cac9c95352743b3806_hd](nn_cs231n_note/677187e96671a4cac9c95352743b3806_hd.png)
 
-![img](images/42.png)
+
+
+![677187e96671a4cac9c95352743b3806_hd](nn_cs231n_note/677187e96671a4cac9c95352743b3806_hd.png)![img](nn_cs231n_note/42.png)
 
 #### Leaky Relu
 
 解决Relu死亡的问题
 
-$$f(x)=\begin{cases}x, x>0\\\alpha x, x<0\end{cases}​$$, $\alpha=0.01​$
+$$f(x)=\begin{cases}x, x>0\\\alpha x, x<0\end{cases}$$, $\alpha=0.01​$
 
 #### ELU
 
 $$f(x)=\begin{cases} x, x>0\\ \alpha(e^x-1), x\leq0\end{cases}$$
 
-![1560776449074](images/1560776449074.png)
+![1560776449074](nn_cs231n_note/1560776449074.png)
 
 #### Maxout
 
@@ -105,19 +108,19 @@ X = X / np.std(X, axis=0)
 X = X / np.std(X, axis=1)
 ```
 
-![img](images/e743b6777775b1671c3b5503d7afbbc4_hd.png)
+![img](nn_cs231n_note/e743b6777775b1671c3b5503d7afbbc4_hd.png)
 
  ### PCA 白化（很少在深度学习中使用）
 
 PCA/白化。**左边**是二维的原始数据。**中间**：经过PCA操作的数据。可以看出数据首先是零中心的，然后变换到了数据协方差矩阵的基准轴上。这样就对数据进行了解相关（协方差矩阵变成对角阵）。**右边**：每个维度都被特征值调整数值范围，将数据协方差矩阵变为单位矩阵。从几何上看，就是对数据在各个方向上拉伸压缩，使之变成服从高斯分布的一个数据点分布。
 
-![img](images/aae11de6e6a29f50d46b9ea106fbb02a_hd.png)
+![img](nn_cs231n_note/aae11de6e6a29f50d46b9ea106fbb02a_hd.png)
 
 ### CIFAR 数据PCA
 
 nx3072 维向量（图片32x32x3）,协方差矩阵：3072x3072
 
-![img](images/8608c06086fc196228f4dda78499a2d9_hd.png)
+![img](nn_cs231n_note/8608c06086fc196228f4dda78499a2d9_hd.png)
 
 1: 49张图片。2: 3072个特征值向量中的前144个。3: 49张PCA降维的图片（U.transpose()[:144,:]）。4: 白化后的数据。144个维度的方差都压缩到相同的数值范围（U.transpose()[:144,:]）。现在较低的频率（代表了大多数方差）可以忽略不计了，较高的频率（代表相对少的方差）就被夸大了。
 
@@ -167,14 +170,14 @@ b = np.zeros(n,)
 
 ## Dropout
 
-![img](images/63fcf4cc655cb04f21a37e86aca333cf_hd.png)
+![img](nn_cs231n_note/63fcf4cc655cb04f21a37e86aca333cf_hd.png)
 
 1.  Bagging 集成模型，随机抽样神经网络的子集。多个共享参数的子网络组成。
 2. 增强单个神经元独立学习特征的能力，减少神经元之间的依赖
 3. 加性噪声
 
 ```
-""" 
+"""
 反向随机失活: 推荐实现方式.
 在训练的时候drop和调整数值范围，测试时不做任何事.
 """
@@ -206,7 +209,7 @@ def predict(X):
 
 批量归一化可以理解为在网络的每一层之前都做预处理，减少之前网络权重对数据的影响，保持每一层输出数据的分布（均值和标准差），使输出适应下一层网络，也使得每一层数据相对独立。
 
-![1560779540116](images/1560779540116.png)
+![1560779540116](nn_cs231n_note/1560779540116.png)
 
 ### Internal Co-variate Shift
 
@@ -235,7 +238,7 @@ Reference: [Batch Normalization原理与实战](<https://zhuanlan.zhihu.com/p/34
    - 简化。让每个特征都有均值为0，方差为1的分布就OK。
    - 白化操作减弱了网络中每一层输入数据表达能力，那我就再加个线性变换操作，让这些数据再能够尽可能恢复本身的表达能力就好了。
 
-   ![1560779531173](images/1560779531173.png)
+   ![1560779531173](nn_cs231n_note/1560779531173.png)
 
 BN 引入了两个可学习的参数 $\gamma$ 和 $\beta$.。这两个参数的引入是为了恢复数据本身的表达能力，对规范后的数据进行线性变换，即 $y_i = \gamma x_i + \beta_i$。 特别的，当 $\gamma^2=\sigma ^2$（方差）, $\beta = \mu$ （均值）时，可以实现等价变换并且保留原始输入特征的分布信息。
 

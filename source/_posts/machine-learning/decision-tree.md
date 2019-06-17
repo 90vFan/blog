@@ -3,9 +3,9 @@ title: Decistion Tree
 date: 2019-01-31 20:33:05
 mathjax: true
 categories:
-  - xiguashu
+  - ml
 tag: 
-  - xiguashu
+  - ml
   - hexo-asset-image
 ---
 
