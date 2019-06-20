@@ -11,6 +11,10 @@ tag:
 深度学习和神经网络(CS231n Note)
 ---------------------------
 
+[TOC]
+
+
+
 ## 1. 神经元模型与数学模型（Neuron Network Unit）
 
 ![img](nn_cs231n_note/d0cbce2f2654b8e70fe201fec2982c7d_hd.png)
@@ -61,7 +65,7 @@ $tanh(x)=2\sigma(2x)-1$
 
 1. 梯度饱和而丢失的情况仍然存在
 
-   ### relu
+### relu
 
 优点
 
@@ -79,7 +83,7 @@ $tanh(x)=2\sigma(2x)-1$
 
 
 
-![677187e96671a4cac9c95352743b3806_hd](nn_cs231n_note/677187e96671a4cac9c95352743b3806_hd.png)![img](nn_cs231n_note/42.png)
+![img](nn_cs231n_note/42.png)
 
 #### Leaky Relu
 
@@ -97,7 +101,37 @@ $$f(x)=\begin{cases} x, x>0\\ \alpha(e^x-1), x\leq0\end{cases}$$
 
 $$max(w_{1}^Tx+b_1, w_{2}^Tx+b_2)$$
 
-## 3. 数据预处理
+## 3. 损失函数
+
+#### 损失函数 Loss function / 代价函数 Cost function
+
+交叉熵损失（cross-entropy loss)
+
+$$L(x)=\sum_{i}p_i\log \frac{1}{q_i}​$$
+
+#### Softmax 函数
+
+![1561034699845](images/1561034699845.png)
+
+$$y_i=\frac{e^{z_i}}{\sum_{i}{e^{z_i}}}$$
+
+## 梯度下降
+
+损失函数 L 的 3D 图：
+
+![1561035128653](images/1561035128653.png)
+
+Gradient: 损失函数 L 在某一点的梯度（斜率，一阶导数）
+
+![1561035151992](images/1561035151992.png)
+
+梯度下降法：某一点沿着斜坡在当前点梯度最大的方向($f'(x)$)移动一个步长(learning rate)，在下一次更新中就会更接近最小点。
+
+$$w = w - \eta dw​$$
+
+
+
+## 4. 数据预处理
 
 ### 归一化 Normalization
 
@@ -166,14 +200,16 @@ b = np.zeros(n,)
 
 #### L2正则
 
+![1561037588255](images/1561037588255.png)
+
 
 
 ## Dropout
 
 ![img](nn_cs231n_note/63fcf4cc655cb04f21a37e86aca333cf_hd.png)
 
-1.  Bagging 集成模型，随机抽样神经网络的子集。多个共享参数的子网络组成。
-2. 增强单个神经元独立学习特征的能力，减少神经元之间的依赖
+1.  Bagging 集成模型，随机抽样神经网络的子集。很多个共享参数的子网络组成。
+2. 增强单个神经元独立学习特征的能力，减少神经元之间的依赖（避免学习某些固定组合才产生的特征，有意识的让神经网络去学习一些普遍的共性）
 3. 加性噪声
 
 ```
@@ -182,16 +218,17 @@ b = np.zeros(n,)
 在训练的时候drop和调整数值范围，测试时不做任何事.
 """
 
-p = 0.5 # 激活神经元的概率. p值更高 = 随机失活更弱
+p = 0.5 	# 激活神经元的概率. p值更高 = 随机失活更弱
 
 def train_step(X):
   # 3层neural network的前向传播
   H1 = np.maximum(0, np.dot(W1, X) + b1)
-  #                  [0, 1]随机分布 P(rand(x)) < p = p
-  mask1 = (np.random.rand(*H1.shape) < p) / p # 第一个随机失活掩码. 注意/p!
-  H1 *= mask1 # drop!
+  # 神经元以p的概率失活 [0, 1]随机分布 P(rand(x)) < p = p
+  # 第一个随机失活掩码. 注意/p! inverted dropout, 保持当前层输出期望一致
+  mask1 = (np.random.rand(*H1.shape) < p) / p  
+  H1 *= mask1                                  # dropout!
   H2 = np.maximum(0, np.dot(W2, H1) + b2)
-  mask2 = (np.random.rand(*H2.shape) < p) / p # 第二个随机失活掩码. 注意/p!
+  mask2 = (np.random.rand(*H2.shape) < p) / p  # 第二个随机失活掩码. 注意/p!
   H2 *= mask2 # drop!
   out = np.dot(W3, H2) + b3
 
@@ -200,7 +237,7 @@ def train_step(X):
 
 def predict(X):
   # 前向传播时模型集成
-  H1 = np.maximum(0, np.dot(W1, X) + b1) # 不用数值范围调整了
+  H1 = np.maximum(0, np.dot(W1, X) + b1)       # 不用数值范围调整了
   H2 = np.maximum(0, np.dot(W2, H1) + b2)
   out = np.dot(W3, H2) + b3
 ```
@@ -240,7 +277,7 @@ Reference: [Batch Normalization原理与实战](<https://zhuanlan.zhihu.com/p/34
 
    ![1560779531173](nn_cs231n_note/1560779531173.png)
 
-BN 引入了两个可学习的参数 $\gamma$ 和 $\beta$.。这两个参数的引入是为了恢复数据本身的表达能力，对规范后的数据进行线性变换，即 $y_i = \gamma x_i + \beta_i$。 特别的，当 $\gamma^2=\sigma ^2$（方差）, $\beta = \mu$ （均值）时，可以实现等价变换并且保留原始输入特征的分布信息。
+BN 引入了两个可学习的参数 $\gamma$ 和 $\beta$（**变换重构**）。这两个参数的引入是为了恢复数据本身的表达能力，对规范后的数据进行线性变换，即 $y_i = \gamma x_i + \beta_i$。 特别的，当 $\gamma^2=\sigma ^2$（方差）, $\beta = \mu$ （均值）时，可以实现等价变换并且保留原始输入特征的分布信息。
 
 #### Batch Normalization 的作用
 
@@ -256,6 +293,6 @@ BN 引入了两个可学习的参数 $\gamma$ 和 $\beta$.。这两个参数的�
 
 **BN通过将每一层网络的输入进行normalization，保证输入分布的均值与方差固定在一定范围内，减少了网络中的Internal Covariate Shift问题，并在一定程度上缓解了梯度消失，加速了模型收敛；并且BN使得网络对参数、激活函数更加具有鲁棒性，降低了神经网络模型训练和调参的复杂度；最后BN训练过程中由于使用mini-batch的mean/variance作为总体样本统计量估计，引入了随机噪声，在一定程度上对模型起到了正则化的效果。**
 
-#### backpropagation
+## Backpropagation
 
 Reference: [Understanding the backward pass through Batch Normalization Layer](<https://kratzert.github.io/2016/02/12/understanding-the-gradient-flow-through-the-batch-normalization-layer.html>)
