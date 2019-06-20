@@ -77,7 +77,7 @@ $tanh(x)=2\sigma(2x)-1$
 
 1. 可能导致部分神经元“死掉”，永远不会被激活。输出值始终为负，激活值为0，梯度为0，反向传播不更新此神经元的梯度。降低学习率来降低神经元“死掉”的概率。
 
-   
+
 
 ![677187e96671a4cac9c95352743b3806_hd](nn_cs231n_note/677187e96671a4cac9c95352743b3806_hd.png)
 
@@ -111,7 +111,7 @@ $$L(x)=\sum_{i}p_i\log \frac{1}{q_i}​$$
 
 #### Softmax 函数
 
-![1561034699845](images/1561034699845.png)
+![1561034699845](nn_cs231n_note/1561034699845.png)
 
 $$y_i=\frac{e^{z_i}}{\sum_{i}{e^{z_i}}}$$
 
@@ -119,11 +119,11 @@ $$y_i=\frac{e^{z_i}}{\sum_{i}{e^{z_i}}}$$
 
 损失函数 L 的 3D 图：
 
-![1561035128653](images/1561035128653.png)
+![1561035128653](nn_cs231n_note/1561035128653.png)
 
 Gradient: 损失函数 L 在某一点的梯度（斜率，一阶导数）
 
-![1561035151992](images/1561035151992.png)
+![1561035151992](nn_cs231n_note/1561035151992.png)
 
 梯度下降法：某一点沿着斜坡在当前点梯度最大的方向($f'(x)$)移动一个步长(learning rate)，在下一次更新中就会更接近最小点。
 
@@ -200,7 +200,7 @@ b = np.zeros(n,)
 
 #### L2正则
 
-![1561037588255](images/1561037588255.png)
+![1561037588255](nn_cs231n_note/1561037588255.png)
 
 
 
@@ -225,7 +225,7 @@ def train_step(X):
   H1 = np.maximum(0, np.dot(W1, X) + b1)
   # 神经元以p的概率失活 [0, 1]随机分布 P(rand(x)) < p = p
   # 第一个随机失活掩码. 注意/p! inverted dropout, 保持当前层输出期望一致
-  mask1 = (np.random.rand(*H1.shape) < p) / p  
+  mask1 = (np.random.rand(*H1.shape) < p) / p
   H1 *= mask1                                  # dropout!
   H2 = np.maximum(0, np.dot(W2, H1) + b2)
   mask2 = (np.random.rand(*H2.shape) < p) / p  # 第二个随机失活掩码. 注意/p!
