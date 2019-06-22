@@ -6,6 +6,7 @@ categories:
   - ml
 tag: 
   - ml
+  - hexo-asset-image
 ---
 
 ## Part 4. 决策树
