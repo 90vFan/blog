@@ -11,19 +11,33 @@ tag:
 深度学习和神经网络(CS231n Note)
 ---------------------------
 
-[TOC]
-
-
+- [深度学习和神经网络(CS231n Note)](#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%92%8C%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CCS231n-Note)
+- [1. 神经元模型与数学模型（Neuron Network Unit）](#1-%E7%A5%9E%E7%BB%8F%E5%85%83%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%95%B0%E5%AD%A6%E6%A8%A1%E5%9E%8BNeuron-Network-Unit)
+- [2. 常用激活函数](#2-%E5%B8%B8%E7%94%A8%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0)
+    - [sigmoid](#sigmoid)
+    - [tanh](#tanh)
+    - [relu](#relu)
+    - [Leaky Relu](#Leaky-Relu)
+    - [ELU](#ELU)
+    - [Maxout](#Maxout)
+- [3. 数据预处理](#3-%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86)
+  - [归一化 Normalization](#%E5%BD%92%E4%B8%80%E5%8C%96-Normalization)
+  - [PCA 白化（很少在深度学习中使用）](#PCA-%E7%99%BD%E5%8C%96%E5%BE%88%E5%B0%91%E5%9C%A8%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E4%BD%BF%E7%94%A8)
+  - [CIFAR 数据PCA](#CIFAR-%E6%95%B0%E6%8D%AEPCA)
+- [4. 权重初始化](#4-%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96)
+    - [小随机数初始化](#%E5%B0%8F%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%88%9D%E5%A7%8B%E5%8C%96)
+    - [使用$\frac{1}{\sqrt{n}} $校准方差](#%E4%BD%BF%E7%94%A8frac1sqrtn-%E6%A0%A1%E5%87%86%E6%96%B9%E5%B7%AE)
+    - [He Normal](#He-Normal)
+    - [偏置初始化 biases](#%E5%81%8F%E7%BD%AE%E5%88%9D%E5%A7%8B%E5%8C%96-biases)
+- [5. 正则化](#5-%E6%AD%A3%E5%88%99%E5%8C%96)
+    - [L1 正则](#L1-%E6%AD%A3%E5%88%99)
+    - [L2正则](#L2%E6%AD%A3%E5%88%99)
 
 ## 1. 神经元模型与数学模型（Neuron Network Unit）
 
 大脑的基本计算单位是神经元（neuron**）**。人类的神经系统中大约有860亿个神经元，它们被大约$10^{14}-10^{15}$个**突触（synapses）**连接起来。下面图表的左边展示了一个生物学的神经元，右边展示了一个常用的数学模型。每个神经元都从它的**树突**获得输入信号，然后沿着它唯一的**轴突（axon）**产生输出信号。轴突在末端会逐渐分枝，通过突触和其他神经元的树突相连。
 
 ![img](nn_cs231n_note/d0cbce2f2654b8e70fe201fec2982c7d_hd.png)
-
-
-
-
 
 神经元（Neuron）通过树突（Dendrites）接收输入信号，沿着轴突（axon）产生输出信号。轴突在末端分叉，通过突触和其他神经元的树突相连。
 
@@ -71,7 +85,7 @@ $tanh(x)=2\sigma(2x)-1$
 
 1. 梯度饱和而丢失的情况仍然存在
 
-### relu
+#### relu
 
 优点
 
@@ -107,45 +121,9 @@ $$f(x)=\begin{cases} x, x>0\\ \alpha(e^x-1), x\leq0\end{cases}$$
 
 $$max(w_{1}^Tx+b_1, w_{2}^Tx+b_2)$$
 
-## 3. 损失函数
-
-#### 损失函数 Loss function / 代价函数 Cost function
-
-#### 均方损失
-
-$L(x)=\sum_{i}(y_i - y_j)^2$
-
-#### 交叉熵损失（cross-entropy loss)
-
-$$L(x)=\sum_{i}p_i\log \frac{1}{q_i}$$
-
-交叉熵作为代价函数可以避免均方代价函数带来的学习减速
-
-#### Softmax 函数
-
-![1561034699845](nn_cs231n_note/1561034699845.png)
-
-$$y_i=\frac{e^{z_i}}{\sum_{i}{e^{z_i}}}$$
-
-## 梯度下降
-
-损失函数 L 的 3D 图：
-
-![1561035128653](nn_cs231n_note/1561035128653.png)
-
-Gradient: 损失函数 L 在某一点的梯度（斜率，一阶导数）
-
-![1561035151992](nn_cs231n_note/1561035151992.png)
-
-![preview](nn_cs231n_note/v2-bcdf4fdd7d2f7a8784a2cfe098f14a8c_r-1561050312112.jpg)
-
-梯度下降法：某一点沿着斜坡在当前点梯度最大的方向($f'(x)​$)移动一个步长(learning rate)，在下一次更新中就会更接近最小点。
-
-$$w = w - \eta dw$$
 
 
-
-## 4. 数据预处理
+## 3. 数据预处理
 
 ### 归一化 Normalization
 
@@ -158,7 +136,7 @@ X = X / np.std(X, axis=1)
 
 ![img](nn_cs231n_note/e743b6777775b1671c3b5503d7afbbc4_hd.png)
 
- ### PCA 白化（很少在深度学习中使用）
+### PCA 白化（很少在深度学习中使用）
 
 PCA/白化。**左边**是二维的原始数据。**中间**：经过PCA操作的数据。可以看出数据首先是零中心的，然后变换到了数据协方差矩阵的基准轴上。这样就对数据进行了解相关（协方差矩阵变成对角阵）。**右边**：每个维度都被特征值调整数值范围，将数据协方差矩阵变为单位矩阵。从几何上看，就是对数据在各个方向上拉伸压缩，使之变成服从高斯分布的一个数据点分布。
 
@@ -206,7 +184,7 @@ W = np.random.randn(n) * sqrt(2.0/n)
 b = np.zeros(n,)
 ```
 
-## 正则化
+## 5. 正则化
 
 #### L1 正则
 
@@ -218,95 +196,9 @@ b = np.zeros(n,)
 
 
 
-## Dropout
+References:
 
-![img](nn_cs231n_note/63fcf4cc655cb04f21a37e86aca333cf_hd.png)
+1. [cs231n课程笔记中文翻译](<https://zhuanlan.zhihu.com/p/21930884>)
+2. [cs231n Assignments 解答 - 大数据文摘](<https://github.com/theBigDataDigest/Stanford-CS231n-assignments-in-Chinese>)
+3.
 
-1.  Bagging 集成模型，随机抽样神经网络的子集。很多个共享参数的子网络组成。
-2. 增强单个神经元独立学习特征的能力，减少神经元之间的依赖（避免学习某些固定组合才产生的特征，有意识的让神经网络去学习一些普遍的共性）
-3. 加性噪声
-
-```
-"""
-反向随机失活: 推荐实现方式.
-在训练的时候drop和调整数值范围，测试时不做任何事.
-"""
-
-p = 0.5 	# 激活神经元的概率. p值更高 = 随机失活更弱
-
-def train_step(X):
-  # 3层neural network的前向传播
-  H1 = np.maximum(0, np.dot(W1, X) + b1)
-  # 神经元以p的概率失活 [0, 1]随机分布 P(rand(x)) < p = p
-  # 第一个随机失活掩码. 注意/p! inverted dropout, 保持当前层输出期望一致
-  mask1 = (np.random.rand(*H1.shape) < p) / p
-  H1 *= mask1                                  # dropout!
-  H2 = np.maximum(0, np.dot(W2, H1) + b2)
-  mask2 = (np.random.rand(*H2.shape) < p) / p  # 第二个随机失活掩码. 注意/p!
-  H2 *= mask2 # drop!
-  out = np.dot(W3, H2) + b3
-
-  # 反向传播:计算梯度... (略)
-  # 进行参数更新... (略)
-
-def predict(X):
-  # 前向传播时模型集成
-  H1 = np.maximum(0, np.dot(W1, X) + b1)       # 不用数值范围调整了
-  H2 = np.maximum(0, np.dot(W2, H1) + b2)
-  out = np.dot(W3, H2) + b3
-```
-
-## Batch Normalization
-
-批量归一化可以理解为在网络的每一层之前都做预处理，减少之前网络权重对数据的影响，保持每一层输出数据的分布（均值和标准差），使输出适应下一层网络，也使得每一层数据相对独立。
-
-![1560779540116](nn_cs231n_note/1560779540116.png)
-
-### Internal Co-variate Shift
-
-Reference: [Batch Normalization原理与实战](<https://zhuanlan.zhihu.com/p/34879333>)
-
-随着训练的进行，网络中的参数也随着梯度下降在不停更新。一方面，当底层网络中参数发生微弱变化时，由于每一层中的线性变换与非线性激活映射，这些微弱变化随着网络层数的加深而被放大（类似蝴蝶效应）；另一方面，参数的变化导致每一层的输入分布会发生改变，进而下一层的网络需要不停地去适应这些分布变化，使得我们的模型训练变得困难。上述这一现象叫做Internal Covariate Shift。
-
-原作定义：在深层网络训练的过程中，由于网络中参数变化而引起内部结点数据分布发生变化的这一过程被称作Internal Covariate Shift。
-
-随着梯度下降的进行，每一层的参数$W^{[l]}$与$b^{[l]}$都会被更新，那么$Z^{[l]}$的分布也就发生了改变，进而$A^{[l]}$也同样出现分布的改变。而$A^{[l]}$作为第 $l+1$ 层的输入，意味着 $l+1$ 层需要去不停适应这种数据分布的变化，这一过程叫做 Interval Covariate Shift.
-
-#### 带来的问题：
-
-1. 上层网络需要不停调整来适应输入数据分布的变化，导致网络学习速度的降低
-2. 网络的训练过程容易陷入梯度饱和区，减缓网络收敛速度（sigmoid, tanh）。 $Z^{[l]}$会逐渐更新并变大，陷入梯度饱和区。可以通过Normalization 使得激活函数输入分布在一个稳定的空间来避免他们陷入梯度饱和区。
-
-#### 如何减缓 Interval Covariate Shift
-
-1. 白化。成本高，改变了网络每一层分布导致数据表达的特征信息丢失
-
-   - 使得输入特征分布具有相同的均值与方差。其中PCA白化保证了所有特征分布均值为0，方差为1
-   - 去除特征之间的相关性
-
-2. Batch Normalization   简化加改进版的白化
-
-   - 简化。让每个特征都有均值为0，方差为1的分布就OK。
-   - 白化操作减弱了网络中每一层输入数据表达能力，那我就再加个线性变换操作，让这些数据再能够尽可能恢复本身的表达能力就好了。
-
-   ![1560779531173](nn_cs231n_note/1560779531173.png)
-
-BN 引入了两个可学习的参数 $\gamma$ 和 $\beta$（**变换重构**）。这两个参数的引入是为了恢复数据本身的表达能力，对规范后的数据进行线性变换，即 $y_i = \gamma x_i + \beta_i$。 特别的，当 $\gamma^2=\sigma ^2$（方差）, $\beta = \mu$ （均值）时，可以实现等价变换并且保留原始输入特征的分布信息。
-
-#### Batch Normalization 的作用
-
-1. 使得网络中每层输入数据的分布相对稳定，加快模型学习速度
-
-2. 使得模型对参数不那么敏感，减小初始化参数对模型学习的影响，可以选择更大的初始化值，学习率选择范围更大
-
-   当学习率设置太高时，会使得参数更新步伐过大，容易出现震荡和不收敛。但是使用BN的网络将不会受到参数数值大小的影响。BN抑制了参数微小变化随着网络层数加深被放大的问题，使得网络对参数大小的适应能力更强
-
-3. 缓解梯度消失的问题
-
-4. 正则化效果，mini-batch 的mean/variance 作为总体样本的抽样估计，引入随机噪声
-
-**BN通过将每一层网络的输入进行normalization，保证输入分布的均值与方差固定在一定范围内，减少了网络中的Internal Covariate Shift问题，并在一定程度上缓解了梯度消失，加速了模型收敛；并且BN使得网络对参数、激活函数更加具有鲁棒性，降低了神经网络模型训练和调参的复杂度；最后BN训练过程中由于使用mini-batch的mean/variance作为总体样本统计量估计，引入了随机噪声，在一定程度上对模型起到了正则化的效果。**
-
-## Backpropagation
-
-Reference: [Understanding the backward pass through Batch Normalization Layer](<https://kratzert.github.io/2016/02/12/understanding-the-gradient-flow-through-the-batch-normalization-layer.html>)
