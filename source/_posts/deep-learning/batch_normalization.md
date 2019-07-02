@@ -17,7 +17,7 @@ tag:
 
 ![1560779540116](batch_normalization/1560779540116.png)
 
-### Internal Co-variate Shift
+## Internal Co-variate Shift
 
 Reference: [Batch Normalization原理与实战](<https://zhuanlan.zhihu.com/p/34879333>)
 
@@ -27,12 +27,12 @@ Reference: [Batch Normalization原理与实战](<https://zhuanlan.zhihu.com/p/34
 
 随着梯度下降的进行，每一层的参数$W^{[l]}$与$b^{[l]}$都会被更新，那么$Z^{[l]}$的分布也就发生了改变，进而$A^{[l]}$也同样出现分布的改变。而$A^{[l]}$作为第 $l+1$ 层的输入，意味着 $l+1$ 层需要去不停适应这种数据分布的变化，这一过程叫做 Interval Covariate Shift.
 
-#### 带来的问题：
+### 带来的问题：
 
 1. 上层网络需要不停调整来适应输入数据分布的变化，导致网络学习速度的降低
 2. 网络的训练过程容易陷入梯度饱和区，减缓网络收敛速度（sigmoid, tanh）。 $Z^{[l]}$会逐渐更新并变大，陷入梯度饱和区。可以通过Normalization 使得激活函数输入分布在一个稳定的空间来避免他们陷入梯度饱和区。
 
-#### 如何减缓 Interval Covariate Shift
+### 如何减缓 Interval Covariate Shift
 
 1. 白化。成本高，改变了网络每一层分布导致数据表达的特征信息丢失
 
@@ -44,11 +44,14 @@ Reference: [Batch Normalization原理与实战](<https://zhuanlan.zhihu.com/p/34
    - 简化。让每个特征都有均值为0，方差为1的分布就OK。
    - 白化操作减弱了网络中每一层输入数据表达能力，那我就再加个线性变换操作，让这些数据再能够尽可能恢复本身的表达能力就好了。
 
+
+##　算法
+
    ![1560779531173](batch_normalization/1560779531173.png)
 
 BN 引入了两个可学习的参数 $\gamma$ 和 $\beta$（**变换重构**）。这两个参数的引入是为了恢复数据本身的表达能力，对规范后的数据进行线性变换，即**$y_i = \gamma \hat{x_i} + \beta_i$**。 特别的，当 $\gamma^2=\sigma ^2$（方差）, $\beta = \mu$ （均值）时，可以实现等价变换并且保留原始输入特征的分布信息。
 
-#### Batch Normalization 的作用
+### Batch Normalization 的作用
 
 1. 使得网络中每层输入数据的分布相对稳定，加快模型学习速度
 
@@ -62,7 +65,7 @@ BN 引入了两个可学习的参数 $\gamma$ 和 $\beta$（**变换重构**）�
 
 **BN通过将每一层网络的输入进行normalization，保证输入分布的均值与方差固定在一定范围内，减少了网络中的Internal Covariate Shift问题，并在一定程度上缓解了梯度消失，加速了模型收敛；并且BN使得网络对参数、激活函数更加具有鲁棒性，降低了神经网络模型训练和调参的复杂度；最后BN训练过程中由于使用mini-batch的mean/variance作为总体样本统计量估计，引入了随机噪声，在一定程度上对模型起到了正则化的效果。**
 
-### Code
+### 前向传播
 
 ```python
 
@@ -98,10 +101,12 @@ def batchnorm_forward(x, gamma, beta, bn_param):
 
     out, cache = None, None
     if mode == 'train':
+        ##########################################
         mu = np.mean(x, axis=0)
         var = np.var(x, axis=0)
         x_norm = (x - mu) / np.sqrt(var + eps)
         out = gamma * x_norm + beta
+        ##########################################
 
         cache = (x, mu, var, eps, x_norm, gamma, beta, out)
         
@@ -109,7 +114,9 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         running_var  = momentum * running_var  + (1 - momentum) * var
     elif mode == 'test':
         x_norm = (x - running_mean) / np.sqrt(running_var + eps)
-        out = gamma * x_norm + beta
+       
+    	# 训练超参数 gamma/beta，重构数据分布
+    	out = gamma * x_norm + beta
     else:
         raise ValueError('Invalid forward batchnorm mode "%s"' % mode)
 
@@ -125,3 +132,53 @@ def batchnorm_forward(x, gamma, beta, bn_param):
 #### 反向传播指示图
 
 ![BNcircuit](batch_normalization/BNcircuit-1561283729951.png)
+
+![1560779531173](batch_normalization/1560779531173.png)
+
+损失函数对$y_i$的梯度为 $\frac{\partial L}{\partial y_i}$，由　$y_i = \gamma \hat{x_i} + \beta$ 得到：
+
+$$\frac{\partial L}{\partial \beta} = \sum_{i=1}^{N} \frac{\partial L}{\partial y_i}$$
+
+$$\frac{\partial L}{\partial \gamma} = \sum_{i=1}^{N} \frac{\partial L}{\partial y_i} \hat{x_i}​$$
+
+$$\frac{\partial L}{\partial \hat{x_i}} = \frac{\partial L}{\partial y_i} \gamma$$
+
+
+
+$$\frac{\partial L}{\partial \mu} = \frac{\partial L}{\partial \hat{x_i}} \frac{\partial \hat{x_i}}{\partial \mu} +  \frac{\partial L}{\partial \sigma^2} \frac{\partial {\sigma^2}}{\partial \mu}  \\  =  -\frac{\partial L}{\partial \hat{x_i}} \frac{1}{\sqrt{\sigma^2 + \epsilon}} + \frac{\partial L}{\partial \sigma^2} (- \frac{2}{N} \sum_{i=1}^{N} (x_i-\mu)) $$
+
+$$\frac{\partial L}{\partial \sigma^2} =  \frac{\partial L}{\partial \hat{x_i}} \frac{\partial \hat{x_i}}{\partial \sigma^2} \\  = \frac{\partial L}{\partial \hat{x_i}} (-\frac{1}{2} )({\sigma^2+\epsilon})^{-\frac{3}{2}}$$
+
+$$\frac{\partial L}{\partial x_i} =  \frac{\partial L}{\partial \hat{x_i}} \frac{\partial \hat{x_i}}{\partial {x_i}} +   \frac{\partial L}{\partial \sigma^2} \frac{\partial \sigma^2}{\partial {x_i}} + \frac{\partial L}{\partial \mu}\frac{\partial \mu}{\partial x_i} \\ = \frac{\partial L}{\partial \hat{x_i}} \frac{1}{\sqrt{\sigma^2 + \epsilon}} + \frac{\partial L}{\partial \sigma^2} \frac{2(x_i - \mu)}{N}  + \frac{\partial L}{\partial \mu} \frac{1}{N} $$
+
+```python
+def batchnorm_backward_alt(dout, cache):
+    """
+    Alternative backward pass for batch normalization.     
+    """
+    (x, mu, var, eps, x_norm, gamma, beta, out) = cache
+    N,D = dout.shape
+    
+    dx_norm = dout * gamma
+    dgamma = np.sum(dout * x_norm, axis=0)
+    dbeta  = np.sum(dout, axis=0)
+
+    dvar = np.sum(dx_norm * (x - mu) * (-0.5) * np.power(var + eps, -3/2), axis=0)
+    dmu = -np.sum(dx_norm / np.sqrt(var + eps), axis=0) + dvar * (-2) * np.sum(x - mu, axis=0) / N
+    dx  =  dx_norm / np.sqrt(var + eps) + dvar * 2 * (x - mu) / N  + dmu / N     
+
+    return dx, dgamma, dbeta
+```
+
+
+
+
+
+分步计算损失函数梯度的方法参考 Reference 2
+
+
+
+Refereces:
+
+1. <https://www.adityaagrawal.net/blog/deep_learning/bprop_batch_norm>
+2. <https://kratzert.github.io/2016/02/12/understanding-the-gradient-flow-through-the-batch-normalization-layer.html>

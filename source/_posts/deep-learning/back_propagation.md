@@ -20,3 +20,6 @@ Reference: [Understanding the backward pass through Batch Normalization Layer](<
 ![1561185066736](back_propagation/1561185066736.png)
 
 $$w = w - \eta dw$$
+
+
+
