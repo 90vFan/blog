@@ -200,5 +200,5 @@ References:
 
 1. [cs231n课程笔记中文翻译](<https://zhuanlan.zhihu.com/p/21930884>)
 2. [cs231n Assignments 解答 - 大数据文摘](<https://github.com/theBigDataDigest/Stanford-CS231n-assignments-in-Chinese>)
-3.
+3. 
 
