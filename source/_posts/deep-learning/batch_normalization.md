@@ -139,7 +139,7 @@ def batchnorm_forward(x, gamma, beta, bn_param):
 
 $$\frac{\partial L}{\partial \beta} = \sum_{i=1}^{N} \frac{\partial L}{\partial y_i}$$
 
-$$\frac{\partial L}{\partial \gamma} = \sum_{i=1}^{N} \frac{\partial L}{\partial y_i} \hat{x_i}​$$
+$$\frac{\partial L}{\partial \gamma} = \sum_{i=1}^{N} \frac{\partial L}{\partial y_i} \hat{x_i}$$
 
 $$\frac{\partial L}{\partial \hat{x_i}} = \frac{\partial L}{\partial y_i} \gamma$$
 
@@ -169,8 +169,6 @@ def batchnorm_backward_alt(dout, cache):
 
     return dx, dgamma, dbeta
 ```
-
-
 
 
 
