@@ -20,11 +20,11 @@ $log\frac{1}{p}​$
 
 ### 熵（Entropy）
 
-信息论中，熵是接收每条消息中包含的信息量($\log\frac{1}{p}​$)的平均值。
+**信息论中，熵是接收每条消息中包含的信息量($\log\frac{1}{p}$)的平均值。**
 
-熵定义为信息的期望值（香农 shannon）：
+熵定义为**信息的期望值**（香农 shannon）：
 
-$$\begin{align} H(X) & = E[I(X)] \\ & = E[-ln(P(X))]  \\ & = -\sum\limits_{i}^n P(x_i)logP(x_i)\end{align} ​$$
+$$\begin{align} H(X) & = E[I(X)] \\ & = E[log(\frac{1}{P(X)})]  \\ & = -\sum\limits_{i}^n P(x_i)logP(x_i)\end{align} $$
 
 表示样本的不确定性量度。在信息世界，熵越高，则能传输越多的信息，熵越低，则意味着传输的信息越少。
 
@@ -40,7 +40,7 @@ $H(X)=log_2{m}$
 
 信息量：可以得到$2^3=8$种情况
 
-不确定性：$log_2{8}=2\ bit$
+不确定性：$log_2{8}=3\ bit$
 
 - 离散分布
 
@@ -62,7 +62,7 @@ $H(X)=\sum\limits_{i}^nP(x_i)log\frac{1}{P(x_i)}$
 
 ### [交叉熵](https://zh.wikipedia.org/wiki/%E4%BA%A4%E5%8F%89%E7%86%B5)
 
-使用分布 q 来预测真实分布 p 的平均编码长度
+**使用分布 q 来预测真实分布 p 的平均编码长度**
 
 $H(p,q)= E_p[\log  \frac{1}{q(i)}] = \sum\limits_{i}^{} p(i)*log\frac{1}{q(i)} $
 
@@ -82,11 +82,15 @@ $H(p,q)= E_p[\log  \frac{1}{q(i)}] = \sum\limits_{i}^{} p(i)*log\frac{1}{q(i)} $
 
 ### KL散度（相对熵）
 
-衡量分布 p 和 q 的差异，使用分布 q 来近似分布 p
+**衡量分布 p 和 q 的差异，使用分布 q 来近似分布 p**　　$D_{KL}(p||q) \ge 0$
 
-$D_{KL}(p||q)=H(p,q)-H(p) = \sum\limits_{i}^{} p(i)*\log\frac{1}{q(i)} - \sum\limits_{i}^{} p(i) *\log\frac{1}{p(i)} = \sum\limits_{i}^{} p(i)*\log\frac{p(i)}{q(i)}$
+![1562775971102](entropy/1562775971102.png)
+
+$D_{KL}(p||q)=E_{x ~ p}[\frac{\log p(i)}{\log q(i)}]=H(p,q)-H(p) = \sum\limits_{i}^{} p(i)*\log\frac{1}{q(i)} - \sum\limits_{i}^{} p(i) *\log\frac{1}{p(i)} = \sum\limits_{i}^{} p(i)*\log\frac{p(i)}{q(i)}$
 
 我们将由q得到的平均编码长度比由p得到的平均编码长度多出的bit数称为“相对熵”，又被称为KL散度(Kullback–Leibler divergence，KLD) [Kullback–Leibler divergence](https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/Kullback%25E2%2580%2593Leibler_divergence)。它表示2个函数或概率分布的差异性：差异越大则相对熵越大，差异越小则相对熵越小，二者分布相同则相对熵为0。
+
+
 
 可以得到，交叉熵 $H(p,q)= E_p[\log  \frac{1}{q(i)}] = H(p) + D_{KL}(p||q)$
 

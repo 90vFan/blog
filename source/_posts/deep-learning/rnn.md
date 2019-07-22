@@ -58,7 +58,7 @@ $$\nabla_W L = \sum_{i=1}^{t} \nabla_{W_i} L$$
 
 ## GRU
 
-![img](rnn/42741-dd3d241fa44a71c0.webp)
+
 
 
 

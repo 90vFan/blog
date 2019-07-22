@@ -55,7 +55,7 @@ tag:
 | ------- | --------------------------------------- | ------------- | ---- | ---- |
 | sigmoid | $ \sigma(x)=\frac{1}{1+e^{-x}} $        | [0,1]         | [0, 0.25]   $\sigma'(x)=\sigma(x)(1-\sigma(x))$ | 分类概率 |
 | tanh    | $tanh(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}$ | [-1,1]        | [0, 1]  $tanh'(x)=1-(tan(x))^2$ |      |
-| relu    | $relu(x)=max(0, x)$                     | $[0,+\infty]$ |$f'_x=\begin{cases}0, x<0\\1, x>0\\undefinded, x=0\end{cases}$||
+| relu    | $relu(x)=max(0, x)$                     | $[0,+\infty]$ |$f'_x=\begin{cases}0, x<0 \\ 1, x>0 \\ undefinded, x=0 \end{cases}$| |
 #### sigmoid
 
 优点：
