@@ -28,6 +28,8 @@ W,V,U: 权重
 
 g,f: 激活函数
 
+![1562156211715](rnn/1562156211715.png)
+
 #### 循环
 
 ![1562068950392](rnn/1562068950392.png)
@@ -35,10 +37,6 @@ g,f: 激活函数
 输出值 $O_t$ 受前面历次输入值 $x_t, x_{t-1}, x_{t-2}...$ 的影响，相当于一定程度上记忆之前任意时间段的有效信息，从而在时序上累积输入 $X_t$，解决长期依赖问题。
 
 *疑问： S作为一个固定大小的矩阵如何记忆有效信息？*
-
-
-
-![点击查看大图](rnn/2256672-3b20294694c3904b.png)
 
 ## BPTT
 
@@ -54,17 +52,31 @@ $$\nabla_W L = \sum_{i=1}^{t} \nabla_{W_i} L$$
 
 
 
+$$f_t = \sigma(W_f[h_{t-1}, x_t] + b_f) $$                       # forget 遗忘门
 
+$$i_t = \sigma(W_i[h_{t-1}, x_t] + b_i)$$                         # input 输入门
+
+$$\widetilde{C}_t = tanh(W_c[h_{t-1}, x_t]  + b_c)$$                 # 特征输入
+
+<<<<<<< HEAD
+
+=======
+>>>>>>> 66f037c2f6c4b40611583b218ec6441bb47385a7
+
+
+$$C_t = f_t \odot C_{t-1} + i_t \odot \widetilde{C}_t$$                          # 选择性遗忘，选择性更新 
+
+$$h_t = o \odot tanh(C_t)$$                                   # output 输出门 
+
+![1562155957295](rnn/1562155957295.png)
 
 ## GRU
 
+合并遗忘门和输入门，使用$z_t$
 
 
 
-
-
-
-
+![A gated recurrent unit neural network.](rnn/LSTM3-var-GRU.png)
 
 
 
